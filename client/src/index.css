@@ -1,0 +1,589 @@
+/* Self-hosted fonts via @fontsource — eliminates external CDN dependency and Google tracking.
+ * Each import loads a single weight/style variant. Run `npm install --save-exact
+ * @fontsource/inter @fontsource/cinzel @fontsource/cinzel-decorative
+ * @fontsource/courier-prime @fontsource/eb-garamond` in client/ if not yet installed.
+ */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/inter/400-italic.css';
+@import '@fontsource/inter/500-italic.css';
+@import '@fontsource/inter/600-italic.css';
+@import '@fontsource/inter/700-italic.css';
+@import '@fontsource/cinzel/400.css';
+@import '@fontsource/cinzel/600.css';
+@import '@fontsource/cinzel-decorative/400.css';
+@import '@fontsource/cinzel-decorative/700.css';
+@import '@fontsource/cinzel-decorative/900.css';
+@import '@fontsource/courier-prime/400.css';
+@import '@fontsource/courier-prime/700.css';
+@import '@fontsource/courier-prime/400-italic.css';
+@import '@fontsource/eb-garamond/400.css';
+@import '@fontsource/eb-garamond/700.css';
+@import '@fontsource/eb-garamond/400-italic.css';
+@import '@fontsource/opendyslexic/400.css';
+@import '@fontsource/opendyslexic/700.css';
+@import '@fontsource/opendyslexic/400-italic.css';
+@import '@fontsource/opendyslexic/700-italic.css';
+@import '@fontsource/libre-baskerville/400.css';
+@import '@fontsource/libre-baskerville/700.css';
+@import '@fontsource/libre-baskerville/400-italic.css';
+@import '@fontsource/source-serif-4/300.css';
+@import '@fontsource/source-serif-4/300-italic.css';
+@import '@fontsource/source-serif-4/400.css';
+@import '@fontsource/source-serif-4/400-italic.css';
+@import '@fontsource/source-serif-4/700.css';
+
+/*
+ * index.css
+ * Global styles, CSS custom property design tokens, and app shell layout.
+ *
+ * Theme system:
+ *   All color, shadow, and font tokens are defined as CSS custom properties
+ *   on :root (light theme defaults). The [data-theme="dark"] block overrides
+ *   the same token names for dark mode. Components reference only tokens —
+ *   never hardcoded hex colors — so the theme switch is a single attribute change.
+ *
+ *   Applying a theme: document.documentElement.setAttribute('data-theme', 'dark')
+ */
+
+/* ── Design Tokens (Light Theme) ──────────────────────────────────────────── */
+
+:root {
+  --topbar-h: 40px;
+
+  /* ── Text colors ─────────────────────────────────────────────────────────── */
+  --text:    #6b6375;   /* Body text */
+  --text-h:  #08060d;   /* Headings and high-contrast labels */
+  --text-dim: #595c65;  /* Muted / secondary text — darkened to ≥4.5:1 on light panel bg */
+
+  /* ── Background colors ───────────────────────────────────────────────────── */
+  --bg:        #fff;     /* Page / editor background */
+  --bg-panel:  #f8f8f9;  /* Sidebar panels */
+  --bg-hover:  #f0eff3;  /* Row hover state */
+
+  /* ── Borders ─────────────────────────────────────────────────────────────── */
+  --border: #e5e4e7;
+
+  /* ── Code block background ───────────────────────────────────────────────── */
+  --code-bg: #f4f3ec;
+
+  /* ── Accent color (steel blue — links, active states, buttons) ─────────────── */
+  --accent:        #4a7d94;
+  --accent-bg:     rgba(74, 125, 148, 0.1);
+  --accent-subtle: rgba(74, 125, 148, 0.08);
+  --accent-border: rgba(74, 125, 148, 0.5);
+
+  /* ── Social / card backgrounds ───────────────────────────────────────────── */
+  --social-bg: rgba(244, 243, 236, 0.5);
+
+  /* ── Elevation shadows ───────────────────────────────────────────────────── */
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow-sm:
+    0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  /* ── Semantic status colors ──────────────────────────────────────────────── */
+  --danger:        #dc2626;
+  --danger-bg:     #fef2f2;
+  --danger-border: #fecaca;
+  --success:       #15803d;
+  --success-bg:    #dcfce7;
+  --success-text:  #166534;
+  --amber:         #b45309;
+  --amber-bg:      #fffbeb;
+  --amber-border:  #fde68a;
+
+  /* ── Typography ──────────────────────────────────────────────────────────── */
+  --sans:    'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono:    ui-monospace, Consolas, monospace;
+
+  font: 15px/150% var(--sans);
+  letter-spacing: 0.1px;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 14px;
+  }
+}
+
+/* ── Dark Theme Overrides ─────────────────────────────────────────────────── */
+/* Applied when <html data-theme="dark"> is set by applyTheme(). */
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --text:    #9ca3af;  /* Softer body text on dark background */
+  --text-h:  #f3f4f6;  /* Near-white headings */
+  --text-dim: #a8b0bf;
+  --bg:        #16171d;
+  --bg-panel:  #1e1f27;
+  --bg-hover:  #252631;
+  --border:    #2e303a;
+  --code-bg:   #1f2028;
+  --accent:        #7a9eb5;
+  --accent-bg:     rgba(122, 158, 181, 0.15);
+  --accent-subtle: rgba(122, 158, 181, 0.1);
+  --accent-border: rgba(122, 158, 181, 0.5);
+  --social-bg: rgba(47, 48, 58, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  --shadow-sm:
+    0 1px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+
+  /* Status colors adjusted for dark backgrounds */
+  --danger-bg:    #3f0e0e;
+  --success-bg:   #052e16;
+  --success-text: #4ade80;
+  --amber:        #fbbf24;
+  --amber-bg:     #78350f;
+  --amber-border: #d97706;
+}
+
+
+[data-theme="dark"] #social .button-icon {
+  filter: invert(1) brightness(2);
+}
+
+/* ── Tome Theme ───────────────────────────────────────────────────────────── */
+/* Steel-dark: ink background, linen text, steel-blue accents, teal actions */
+
+[data-theme="tome"] {
+  color-scheme: dark;
+  --text:          #99aab5;
+  --text-h:        #dde4e8;
+  --text-dim:      rgba(153, 170, 181, 0.80);
+  --bg:            #14161f;
+  --bg-panel:      #1c1f2e;
+  --bg-hover:      #252a3a;
+  --border:        rgba(122, 158, 181, 0.18);
+  --code-bg:       #1c1f2e;
+  --accent:        #7a9eb5;
+  --accent-bg:     rgba(122, 158, 181, 0.12);
+  --accent-subtle: rgba(122, 158, 181, 0.08);
+  --accent-border: rgba(122, 158, 181, 0.4);
+  --social-bg:     rgba(28, 31, 46, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.5) 0 10px 15px -3px, rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
+  --shadow-sm:
+    0 1px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.25);
+  --danger:        #dc2626;
+  --danger-bg:     #3f0e0e;
+  --danger-border: rgba(220, 38, 38, 0.4);
+  --success-bg:    #052e16;
+  --success-text:  #4ade80;
+  --amber:         #fbbf24;
+  --amber-bg:      #78350f;
+  --amber-border:  #d97706;
+  --heading:       'Libre Baskerville', serif;
+}
+
+/* ── Text selection highlight ─────────────────────────────────────────────── */
+/* Each theme gets a distinct, contrasting selection color. */
+
+::selection                         { background: rgba(74, 125, 148, 0.25); color: inherit; }
+[data-theme="dark"]  ::selection    { background: rgba(122, 158, 181, 0.35); color: inherit; }
+[data-theme="tome"]  ::selection    { background: rgba(122, 158, 181, 0.35); color: inherit; }
+
+body {
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Standalone pages (help, profile, login) render outside .app-shell — let them scroll */
+#root:has(.help-page),
+#root:has(.profile-page),
+#root:has(.landing-page),
+#root:has(.login-page) {
+  overflow: auto;
+  height: auto;
+  min-height: 100vh;
+}
+
+/* ── App Shell Layout ────────────────────────────────────────────────────── */
+/* Full-viewport flex column: topbar + workspace row */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Top Navigation Bar ───────────────────────────────────────────────────── */
+
+.app-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 40px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  z-index: 10;
+  box-shadow: var(--shadow-sm);
+}
+
+.app-logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+}
+
+.app-avatar {
+  border-radius: 50%;
+  display: block;
+}
+
+.app-display-name {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.app-signout-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-signout-btn:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.app-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 4px;
+  padding: 2px 6px;
+  transition: background 0.15s;
+}
+.app-profile-link:hover { background: var(--bg-hover); }
+.app-profile-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── User avatar button + dropdown menu ───────────────────────────────────── */
+
+.app-topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.app-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 8px 2px 4px;
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.app-profile-btn:hover { background: var(--bg-hover); }
+.app-profile-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.app-profile-btn-arrow {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-left: 2px;
+}
+
+.app-user-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 500;
+  min-width: 140px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  font-size: 13px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.app-user-menu-item:hover { background: var(--bg-hover); }
+.app-user-menu-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.app-user-menu-item--danger { color: var(--accent); }
+
+.app-workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Editor area: holds one or two panes side-by-side ────────────────────── */
+/* flex: 1 means it fills all remaining horizontal space after the binder. */
+
+.app-editor-area {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.app-split-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Toolbar buttons (topbar) ────────────────────────────────────────────── */
+
+.toolbar-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toolbar-btn:hover {
+  background: var(--bg-hover);
+}
+
+.toolbar-btn--active {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Skip navigation link (WCAG 2.4.1) ─────────────────────────────────────── */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--bg);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-link:focus { top: 8px; }
+
+/* ── Topbar button groups and separators ────────────────────────────────────── */
+
+.app-topbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+
+.app-topbar-sep {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.toolbar-btn--cta {
+  border-color: var(--accent-border);
+}
+
+.app-theme-btn {
+  font-size: 12px;
+  height: 28px;
+  padding: 0 8px;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.app-theme-btn:hover {
+  background: var(--bg-hover);
+}
+
+.toolbar-btn:focus-visible,
+.app-theme-btn:focus-visible,
+.app-signout-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+/* ── Mobile-only elements (hidden on desktop) ─────────────────────────────── */
+
+.app-hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.app-hamburger-btn:hover {
+  background: var(--bg-hover);
+}
+
+.app-hamburger-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.app-overflow-menu-btn {
+  display: none;
+}
+
+.app-notes-mobile-btn {
+  display: none;
+}
+
+.mobile-backdrop {
+  display: none;
+}
+
+.app-overflow-menu {
+  display: none;
+}
+
+/* ── Distraction-free fullscreen ─────────────────────────────────────────── */
+/* body.editor-fullscreen is toggled by Editor.jsx; hiding topbar and binder  */
+/* is enough — the flex layout expands the editor area automatically.         */
+
+body.editor-fullscreen .app-topbar { display: none; }
+body.editor-fullscreen .binder     { display: none; }
+
+/* ── Print styles ─────────────────────────────────────────────────────────── */
+
+@media print {
+  /* Hide all UI chrome — only the document text should reach the printed page. */
+  .app-topbar,
+  .binder,
+  .sprint-panel,
+  .targets-widget,
+  .app-notes-mobile-btn,
+  .mobile-backdrop,
+  .app-overflow-menu { display: none; }
+
+  /* Allow shell and workspace to expand fully so content isn’t clipped at   */
+  /* the screen viewport boundary when the browser paginates the document.   */
+  .app-shell,
+  .app-workspace { overflow: visible; }
+
+  /* Nuclear reset: strip every box-shadow from every element. This catches   */
+  /* any shadow that survives the display:none rules above (e.g. the mobile   */
+  /* binder shadow that bleeds in via CSS cascade on narrow print pages).     */
+  * { box-shadow: none !important; }
+}

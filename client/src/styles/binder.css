@@ -1,0 +1,500 @@
+/*
+ * binder.css
+ * Styles for the left-sidebar binder panel: project switcher, document tree,
+ * node rows, drag handles, inline rename inputs, and context menu integration.
+ * Uses design tokens from index.css.
+ */
+
+/* ── Binder sidebar ────────────────────────────────────────────────────────── */
+
+/* ── Binder collapse rail ──────────────────────────────────────────────────── */
+
+.binder-rail {
+  display: contents;
+}
+
+.binder-rail--collapsed .binder {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+/* ── Binder sidebar ────────────────────────────────────────────────────────── */
+
+.binder {
+  width: 240px;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  background: var(--binder-bg, #f7f7f8);
+  border-right: 1px solid var(--border);
+  height: 100%;
+  overflow: hidden;
+  transition: width 0.2s ease, min-width 0.2s ease, border-right-width 0.2s ease;
+  /* Prevent text selection while dragging */
+  user-select: none;
+}
+
+[data-theme="dark"] .binder {
+  --binder-bg: #1c1c20;
+}
+
+[data-theme="tome"] .binder {
+  --binder-bg: #1c1f2e;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+
+.binder-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.binder-project-select {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 6px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.binder-project-select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ── Custom project picker ──────────────────────────────────────────────────── */
+
+.binder-project-picker {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.binder-project-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+  text-align: left;
+}
+.binder-project-btn:hover { border-color: var(--accent); }
+.binder-project-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.binder-project-btn-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.binder-project-arrow {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  color: var(--text-dim);
+}
+
+.binder-project-listbox {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 200;
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.binder-project-option {
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.binder-project-option:hover { background: var(--bg-hover); }
+.binder-project-option:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.binder-project-option--active { color: var(--accent); font-weight: 500; }
+
+.binder-project-rename {
+  flex: 1;
+  min-width: 0;
+}
+
+.binder-icon-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+
+.binder-icon-btn:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.binder-icon-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Close button — hidden on desktop, shown on mobile via mobile.css */
+.binder-close-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.binder-close-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.binder-close-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── New-project input row ──────────────────────────────────────────────────── */
+
+.binder-input-row {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Rename input (shared) ──────────────────────────────────────────────────── */
+
+.binder-rename-input {
+  width: 100%;
+  padding: 3px 6px;
+  font-size: 13px;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--text-h);
+  box-sizing: border-box;
+  outline: none;
+}
+
+.binder-rename-input:focus {
+  box-shadow: 0 0 0 2px var(--accent-border);
+}
+
+/* ── Support footer ─────────────────────────────────────────────────────────── */
+
+.binder-footer {
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.binder-support-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: rgba(199, 48, 80, 0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.binder-support-link:hover {
+  color: #c73050;
+}
+
+.binder-support-link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Tree container ─────────────────────────────────────────────────────────── */
+
+.binder-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  /* Scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.binder-tree::-webkit-scrollbar        { width: 5px; }
+.binder-tree::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 3px; }
+.binder-tree::-webkit-scrollbar-track  { background: transparent; }
+
+/* ── Tree node ──────────────────────────────────────────────────────────────── */
+
+.binder-node {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding-right: 8px;
+  border-radius: 4px;
+  margin: 1px 4px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.1s;
+}
+
+.binder-node:hover {
+  background: var(--accent-bg);
+}
+
+.binder-node--active {
+  background: var(--accent-bg);
+}
+
+.binder-node--active .binder-node-title,
+.binder-node--active .binder-expand-btn {
+  color: var(--accent);
+}
+
+.binder-node:focus {
+  outline: none;
+}
+
+/* Keyboard focus ring — offset inset so it stays within the border-radius curve. */
+.binder-node:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--accent-bg);
+}
+
+.binder-node--dragging {
+  opacity: 0.35;
+}
+
+/* ── Expand/collapse chevron ────────────────────────────────────────────────── */
+
+.binder-expand-btn {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: var(--text);
+  border-radius: 2px;
+  transition: color 0.1s;
+}
+
+.binder-expand-btn:hover {
+  color: var(--accent);
+}
+
+.binder-expand-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.binder-expand-btn--hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* SVG chevron — collapsed points right, expanded points down via 90° rotation */
+.binder-chevron {
+  width: 12px;
+  height: 12px;
+  transition: transform 150ms ease;
+  transform: rotate(-90deg);
+}
+.binder-expand-btn[data-expanded="true"] .binder-chevron {
+  transform: rotate(0deg);
+}
+
+/* ── Type icon ──────────────────────────────────────────────────────────────── */
+
+.binder-icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--text);
+  transition: color 0.1s;
+}
+
+.binder-node--active .binder-icon {
+  color: var(--accent);
+}
+
+/* ── Node title ─────────────────────────────────────────────────────────────── */
+
+.binder-node-title {
+  font-size: 13px;
+  color: var(--text-h);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ⋮ button — hidden until the row is hovered or keyboard-focused */
+.binder-menu-btn {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  color: var(--text-dim);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.1s, color 0.1s;
+}
+.binder-node:hover .binder-menu-btn,
+.binder-node--active .binder-menu-btn { opacity: 1; }
+.binder-menu-btn:hover { color: var(--accent); }
+.binder-menu-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; opacity: 1; }
+
+/* ── Empty state ────────────────────────────────────────────────────────────── */
+
+.binder-empty {
+  padding: 16px 12px;
+  font-size: 12px;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Drag ghost overlay ─────────────────────────────────────────────────────── */
+
+.binder-drag-ghost {
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* ── Context menu ───────────────────────────────────────────────────────────── */
+
+.context-menu {
+  position: fixed;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  min-width: 160px;
+  overflow: hidden;
+  padding: 4px 0;
+}
+
+.context-menu-item {
+  display: block;
+  width: 100%;
+  padding: 6px 14px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--text-h);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.context-menu-item:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.context-menu-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.context-menu-item--danger {
+  color: var(--danger);
+}
+
+.context-menu-item--danger:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ── Label / Status color dots ──────────────────────────────────────────────── */
+
+.binder-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.binder-color-dot--status {
+  border-radius: 2px;
+}

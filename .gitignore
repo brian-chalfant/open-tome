@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment files — NEVER commit secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+.env.dev
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+testdata/
+
+# Build artifacts
+dist/
+build/
+client/dist/
+server/dist/
+
+# Claude
+.claude/
+CLAUDE.md
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.cursorignore
+# Test coverage
+coverage/
+
+# Docker
+docker-compose.override.yml
+
+# TLS certificates — never commit private keys
+certs/
+
+Branding/
+branding/
+Secret/
+Secrets/
+
+# E2E tests (Playwright)
+e2e/.auth/user.json
+e2e/.auth/*.json
+e2e/.env.e2e
+e2e/playwright-report/
+e2e/test-results/
+e2e/dist/
+
+desktop/

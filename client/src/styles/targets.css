@@ -1,0 +1,135 @@
+/*
+ * targets.css
+ * Styles for the TargetsWidget — slim progress bar below the topbar.
+ */
+
+.targets-widget {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 5px 20px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+
+.targets-section {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.targets-label {
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+.targets-label--dim {
+  color: var(--text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.targets-pct {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.targets-bar-track {
+  width: 100px;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.targets-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease, background 0.5s ease;
+  min-width: 2px;
+}
+
+/* Draft bar when no goal is set — dashed outline, no fill */
+.targets-bar-track--no-goal {
+  background: transparent;
+  border: 1px dashed var(--border);
+  overflow: visible;
+}
+
+/* "Set goal" link button in the draft row */
+.targets-set-goal-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font-size: 11px;
+  font-family: var(--sans);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.targets-set-goal-btn:hover {
+  text-decoration: underline;
+}
+
+/* Session goal inline edit button */
+.targets-goal-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text);
+  font-size: 12px;
+  font-family: var(--sans);
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+.targets-goal-btn:hover {
+  color: var(--accent, #9333ea);
+}
+
+.targets-goal-input {
+  width: 60px;
+  font-size: 12px;
+  font-family: var(--sans);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  padding: 1px 4px;
+}
+
+.targets-goal-input:focus {
+  outline: 2px solid var(--accent, #9333ea);
+  outline-offset: 1px;
+}
+
+/* Pace section */
+.targets-pace {
+  gap: 6px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.targets-sep {
+  color: var(--border);
+}
+
+@media (max-width: 768px) {
+  .targets-widget {
+    padding: 6px 12px;
+    gap: 12px;
+  }
+
+  .targets-bar-track {
+    width: 70px;
+  }
+}

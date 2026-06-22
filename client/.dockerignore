@@ -1,0 +1,8 @@
+node_modules
+dist
+.env*
+src/test
+src/components/__tests__
+eslint.config.js
+README.md
+dev.ps1

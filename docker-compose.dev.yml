@@ -1,0 +1,97 @@
+# docker-compose.dev.yml
+# Standalone dev environment — do NOT combine with docker-compose.yml.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build
+#   (dev.ps1 does this for you)
+#
+# What's different from production:
+#   - Separate dev-pg volume so prod data is never touched.
+#   - Backend uses nodemon + live-mounted source for hot reload.
+#   - Frontend uses Vite dev server (port 5173) with HMR, not Nginx.
+#   - Ports 3001 and 5432 exposed to host for direct API/DB testing.
+#   - No backup service.
+#
+# Windows note: Docker Desktop normalizes forward-slash paths in volume mounts.
+# Use forward slashes here even on Windows hosts.
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB:       tome_app_dev
+      POSTGRES_USER:     tome_app
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - dev-pg:/var/lib/postgresql/data
+    networks:
+      - internal
+    ports:
+      - "127.0.0.1:5432:5432"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tome_app -d tome_app_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    command: ["npx", "nodemon", "src/index.js"]
+    env_file: .env.dev
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://tome_app:${POSTGRES_PASSWORD}@postgres:5432/tome_app_dev
+      ALLOWED_ORIGIN: http://localhost:5173
+      # Pass E2E=true from the host when running Playwright so the server skips
+      # rate limiting (all Playwright workers share one IP and hit limits instantly).
+      # Usage: $env:E2E='true'; docker compose -f docker-compose.dev.yml up
+      E2E: ${E2E:-}
+    volumes:
+      - ./server/src:/app/src
+    networks:
+      - internal
+    ports:
+      - "127.0.0.1:3001:3001"
+      - "127.0.0.1:3002:3002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    env_file: .env.dev
+    environment:
+      VITE_API_BASE_URL: ""                  # empty → Vite proxy handles /api, not direct URL
+      API_TARGET: "http://backend:3001"      # Vite proxy target inside Docker network
+      WS_TARGET:  "ws://backend:3001"
+    networks:
+      - internal
+    depends_on:
+      - backend
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  dev-pg:

@@ -1,0 +1,698 @@
+/*
+ * editor.css
+ * Styles for the TipTap rich text editor: wrapper, toolbar buttons,
+ * save status badge, and ProseMirror content area.
+ * Uses design tokens from index.css.
+ */
+
+/* ── Editor wrapper ─────────────────────────────────────────────────────── */
+
+.editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── Toolbar ────────────────────────────────────────────────────────────── */
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.editor-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 5px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+  user-select: none;
+}
+
+.editor-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border);
+}
+
+.editor-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.editor-btn--active {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.editor-toolbar > [role="group"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+  border-right: 1px solid var(--border);
+}
+
+.editor-toolbar > [role="group"]:last-of-type {
+  border-right: none;
+}
+
+.editor-toolbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editor-word-count {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.editor-save-status {
+  font-size: 12px;
+  white-space: nowrap;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.editor-save-status--saving {
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.editor-save-status--saved {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.editor-save-status--offline {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* ── Folder / chapter notes notice ─────────────────────────────────────── */
+
+.editor-folder-notice {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-dim);
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+/* ── Synopsis panel ─────────────────────────────────────────────────────── */
+
+.editor-synopsis-bar {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.editor-synopsis-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s, color 0.1s;
+}
+
+.editor-synopsis-toggle:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.editor-synopsis-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.editor-synopsis-caret {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.editor-synopsis-textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 12px 10px;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.55;
+  resize: vertical;
+  min-height: 64px;
+  max-height: 200px;
+  outline: none;
+}
+
+.editor-synopsis-textarea:focus {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.editor-synopsis-textarea::placeholder {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── Editor font families ────────────────────────────────────────────────── */
+
+.editor-font-sans     .editor-content { font-family: 'Inter', system-ui, sans-serif; }
+.editor-font-serif    .editor-content { font-family: 'EB Garamond', Georgia, serif; font-size: var(--editor-font-size, 17px); }
+.editor-font-writer   .editor-content { font-family: 'Courier Prime', 'Courier New', monospace; font-size: var(--editor-font-size, 15px); }
+.editor-font-georgia  .editor-content { font-family: Georgia, 'Times New Roman', serif; }
+.editor-font-dyslexic .editor-content { font-family: 'OpenDyslexic', sans-serif; font-size: var(--editor-font-size, 16px); letter-spacing: 0.05em; line-height: var(--editor-line-height, 1.5); }
+.editor-font-comic    .editor-content { font-family: 'Comic Sans MS', 'Comic Sans', cursive; font-size: var(--editor-font-size, 15px); }
+
+.editor-font-select {
+  height: 26px;
+  padding: 0 4px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+}
+
+.editor-font-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.editor-select-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.editor-reset-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editor-reset-confirm-label {
+  font-size: 12px;
+  color: var(--danger);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.editor-btn--danger {
+  color: var(--danger);
+}
+
+.editor-btn--danger:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+.zoom-display {
+  font-size: 12px;
+  color: var(--text-dim);
+  min-width: 36px;
+  text-align: center;
+  padding: 0 2px;
+  user-select: none;
+}
+
+/* ── Scrollable editor area ─────────────────────────────────────────────── */
+
+.editor-scroll {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding: 32px 48px;
+  cursor: text;
+}
+
+@media (max-width: 700px) {
+  .editor-scroll {
+    padding: 16px;
+  }
+}
+
+.editor-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text-dim);
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* ── TipTap ProseMirror content ─────────────────────────────────────────── */
+
+.editor-content {
+  outline: none;
+  min-height: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: var(--editor-font-size, 16px);
+  line-height: var(--editor-line-height, 1.5);
+  color: var(--text);
+}
+
+.editor-content p {
+  margin: 0 0 0.75em;
+}
+
+.editor-content h1 {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin: 1.2em 0 0.5em;
+  line-height: 1.25;
+  font-family: inherit;
+}
+
+.editor-content h2 {
+  font-size: 1.4em;
+  font-weight: 600;
+  margin: 1em 0 0.4em;
+  font-family: inherit;
+}
+
+.editor-content h3 {
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 0.9em 0 0.35em;
+  font-family: inherit;
+}
+
+.editor-content ul,
+.editor-content ol {
+  padding-left: 1.5em;
+  margin: 0 0 0.75em;
+  list-style: none;
+}
+
+.editor-content li {
+  position: relative;
+  margin: 0 0 0.25em;
+  padding-left: 0.25em;
+}
+
+/* Bullet markers via ::before so they're never clipped by overflow */
+.editor-content ul > li::before {
+  content: '•';
+  position: absolute;
+  left: -1em;
+  color: var(--text);
+}
+
+.editor-content ul ul > li::before {
+  content: '◦';
+}
+
+.editor-content ul ul ul > li::before {
+  content: '▪';
+}
+
+/* Numbered markers via CSS counters */
+.editor-content ol {
+  counter-reset: ol-counter;
+}
+
+.editor-content ol > li {
+  counter-increment: ol-counter;
+}
+
+.editor-content ol > li::before {
+  content: counter(ol-counter) '.';
+  position: absolute;
+  left: -1.5em;
+  min-width: 1.25em;
+  text-align: right;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.editor-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1em;
+  color: var(--text-dim);
+  margin: 0.75em 0;
+  font-style: italic;
+}
+
+/* ── First-line indent (book style) ────────────────────────────────────── */
+
+.editor-content [data-indent="1"] { text-indent: 1.5em; }
+.editor-content [data-indent="2"] { text-indent: 3em; }
+.editor-content [data-indent="3"] { text-indent: 4.5em; }
+.editor-content [data-indent="4"] { text-indent: 6em; }
+.editor-content [data-indent="5"] { text-indent: 7.5em; }
+.editor-content [data-indent="6"] { text-indent: 9em; }
+.editor-content [data-indent="7"] { text-indent: 10.5em; }
+.editor-content [data-indent="8"] { text-indent: 12em; }
+
+/* ── Block indent (all lines) ─────────────────────────────────────────── */
+
+.editor-content [data-block-indent="1"] { margin-left: 2em; }
+.editor-content [data-block-indent="2"] { margin-left: 4em; }
+.editor-content [data-block-indent="3"] { margin-left: 6em; }
+.editor-content [data-block-indent="4"] { margin-left: 8em; }
+.editor-content [data-block-indent="5"] { margin-left: 10em; }
+.editor-content [data-block-indent="6"] { margin-left: 12em; }
+.editor-content [data-block-indent="7"] { margin-left: 14em; }
+.editor-content [data-block-indent="8"] { margin-left: 16em; }
+
+.editor-content code {
+  font-family: monospace;
+  background: var(--bg-hover);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.editor-content pre {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.9em;
+  margin: 0.75em 0;
+}
+
+.editor-content mark {
+  background: var(--amber-bg);
+  outline: 1px solid var(--amber-border);
+  border-radius: 2px;
+  padding: 0 2px;
+  color: #111827 !important; /* TipTap Highlight sets style="color: inherit" inline — !important is required to override it */
+}
+
+.editor-highlight-swatches {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.editor-highlight-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color 0.1s, transform 0.1s;
+}
+
+.editor-highlight-swatch:hover {
+  transform: scale(1.15);
+  border-color: var(--border);
+}
+
+.editor-highlight-swatch--active {
+  border-color: var(--text-h);
+  transform: scale(1.15);
+}
+
+/* ── Text color swatches ────────────────────────────────────────────────── */
+
+.editor-text-color-swatches {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.editor-text-color-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: border-color 0.1s, transform 0.1s;
+}
+
+.editor-text-color-swatch:hover {
+  transform: scale(1.15);
+  border-color: var(--border);
+}
+
+.editor-text-color-swatch--active {
+  border-color: var(--text-h);
+  transform: scale(1.15);
+}
+
+/* Dark / Tome themes: darken bright pastel highlights so they work on dark backgrounds.
+   filter applies to both marks in the editor and the swatch previews so they match. */
+[data-theme="dark"] .editor-content mark {
+  filter: brightness(0.55) saturate(0.75);
+  color: #111827 !important;
+}
+[data-theme="dark"] .editor-highlight-swatch {
+  filter: brightness(0.55) saturate(0.75);
+}
+
+[data-theme="tome"] .editor-content mark {
+  filter: brightness(0.50) saturate(0.70) hue-rotate(10deg);
+  color: #dde4e8 !important;
+}
+[data-theme="tome"] .editor-highlight-swatch {
+  filter: brightness(0.50) saturate(0.70) hue-rotate(10deg);
+}
+
+.editor-content hr {
+  border: none;
+  border-top: 2px solid var(--border);
+  margin: 1.5em 0;
+}
+
+/* ── Tables ────────────────────────────────────────────────────────────── */
+
+.editor-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.75em 0;
+}
+
+.editor-content th,
+.editor-content td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  min-width: 80px;
+}
+
+.editor-content th {
+  background: var(--bg-panel);
+  font-weight: 600;
+}
+
+.editor-content .selectedCell {
+  background: var(--accent-subtle);
+}
+
+.editor-content .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent);
+  cursor: col-resize;
+  pointer-events: auto;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  margin: 0.75em 0;
+}
+
+.resize-cursor {
+  cursor: col-resize;
+}
+
+/* Placeholder (empty doc) */
+.editor-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-dim);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* ── Split editor chrome ────────────────────────────────────────────────── */
+
+.editor-pane {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.editor-pane--focused {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.editor-pane-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.editor-pane-label button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.editor-pane-label button:hover {
+  color: var(--text);
+}
+
+.editor-pane-label button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.editor-empty-pane {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 14px;
+  padding: 32px;
+  text-align: center;
+}
+
+/* ── Rich empty state (desktop, no document selected) ── */
+
+.editor-empty-pane--rich {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editor-empty-icon {
+  font-size: 40px;
+  line-height: 1;
+  color: var(--text-dim);
+}
+
+.editor-empty-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0;
+}
+
+.editor-empty-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  max-width: 340px;
+  margin: 0;
+}
+
+.editor-empty-cta {
+  margin-top: 8px;
+  padding: 8px 20px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.editor-empty-cta:hover         { background: var(--accent); color: #fff; }
+.editor-empty-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── Print styles ─────────────────────────────────────────────────────────── */
+/* window.print() is called by the Print button; these rules hide all editor  */
+/* chrome so only the document content reaches the printed page.              */
+
+@media print {
+  .editor-toolbar,
+  .editor-synopsis-bar,
+  .editor-folder-notice,
+  .editor-pane-label { display: none; }
+  /* Remove the focus outline from the active split pane — it draws a colored */
+  /* rectangle around the pane that is irrelevant (and ugly) in print.        */
+  .editor-pane--focused { outline: none; }
+
+  /* Break every flex/overflow constraint in the ancestor chain so the browser */
+  /* can paginate the full document across multiple pages. Without height:auto  */
+  /* the containers stay locked to 100vh and only the first visible page prints. */
+  #root,
+  .app-shell,
+  .app-workspace {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .app-editor-area,
+  .editor-pane,
+  .editor-wrapper,
+  .editor-scroll {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0;
+  }
+
+  .editor-content {
+    max-width: 100%;
+  }
+}

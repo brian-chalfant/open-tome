@@ -1,0 +1,357 @@
+/*
+ * labels.css
+ * Styles for LabelStatusPicker (floating popover) and the ProjectManager
+ * Labels & Statuses management section.
+ */
+
+/* ── LabelStatusPicker overlay + panel ──────────────────────────────────────── */
+
+.lsp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  pointer-events: none;
+}
+
+.lsp-panel {
+  pointer-events: all;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  width: 220px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1100;
+}
+
+.lsp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.lsp-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lsp-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.lsp-close-btn:hover { color: var(--text); background: var(--bg-hover); }
+
+/* ── Item list ── */
+
+.lsp-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.lsp-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-h);
+  transition: background 0.1s;
+}
+
+.lsp-item:hover { background: var(--accent-bg); }
+
+.lsp-item--active { background: var(--accent-bg); }
+.lsp-item--active .lsp-item-name { color: var(--accent); font-weight: 500; }
+
+.lsp-item-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Color dots ── */
+
+.lsp-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.lsp-dot--square { border-radius: 2px; }
+
+.lsp-dot--none {
+  border: 1.5px solid var(--border);
+  background: transparent;
+}
+
+/* ── New item trigger ── */
+
+.lsp-new-trigger {
+  display: block;
+  width: 100%;
+  padding: 7px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.lsp-new-trigger:hover { background: var(--accent-bg); color: var(--accent); }
+
+/* ── New item inline form ── */
+
+.lsp-new-form {
+  border-top: 1px solid var(--border);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.lsp-new-input {
+  width: 100%;
+  padding: 4px 7px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--text-h);
+  box-sizing: border-box;
+}
+
+.lsp-new-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.lsp-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.lsp-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.1s;
+}
+
+.lsp-swatch:hover { transform: scale(1.2); }
+
+.lsp-swatch--active {
+  border-color: var(--text-h);
+  transform: scale(1.15);
+}
+
+.lsp-new-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.lsp-btn {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.lsp-btn:hover { background: var(--bg-hover); }
+.lsp-btn:disabled { opacity: 0.5; cursor: default; }
+
+.lsp-btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.lsp-btn--primary:hover { opacity: 0.88; }
+
+/* ── ProjectManager Labels & Statuses section ────────────────────────────────── */
+
+.pm-ls-section {
+  margin-top: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.pm-ls-columns {
+  display: flex;
+  gap: 16px;
+  padding: 0 0 4px 0;
+}
+
+.pm-ls-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.pm-ls-col-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.pm-ls-list {
+  list-style: none;
+  margin: 0 0 6px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pm-ls-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 13px;
+  color: var(--text-h);
+}
+
+.pm-ls-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.pm-ls-dot--square { border-radius: 2px; }
+
+.pm-ls-name {
+  flex: 1;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pm-ls-name:hover { color: var(--accent); }
+
+.pm-ls-del-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 12px;
+  padding: 1px 3px;
+  border-radius: 2px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.1s, color 0.1s;
+}
+
+.pm-ls-item:hover .pm-ls-del-btn { opacity: 1; }
+.pm-ls-del-btn:hover { color: var(--danger); }
+
+/* Edit row */
+
+.pm-ls-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.pm-ls-palette-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.pm-ls-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.1s;
+}
+
+.pm-ls-swatch:hover { transform: scale(1.2); }
+
+.pm-ls-swatch--active {
+  border-color: var(--text-h);
+  transform: scale(1.15);
+}
+
+.pm-ls-name-input {
+  width: 100%;
+  padding: 3px 6px;
+  font-size: 12px;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--text-h);
+  box-sizing: border-box;
+}
+
+.pm-ls-name-input:focus { outline: none; box-shadow: 0 0 0 2px var(--accent-border); }
+
+.pm-ls-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 2px;
+}
+
+.pm-ls-add-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.pm-ls-add-trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 2px 0;
+  text-align: left;
+  transition: color 0.1s;
+}
+
+.pm-ls-add-trigger:hover { color: var(--accent); }

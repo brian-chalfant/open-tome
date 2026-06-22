@@ -1,0 +1,282 @@
+/*
+ * mobile.css
+ * All responsive overrides for viewports ≤ 768px.
+ * Imported after index.css so these rules take precedence.
+ */
+
+@media (max-width: 768px) {
+
+  /* ── Tokens ─────────────────────────────────────────────────────── */
+  :root {
+    --topbar-h: 48px;
+  }
+
+  /* ── App topbar ──────────────────────────────────────────────────── */
+  .app-topbar {
+    height: var(--topbar-h);
+    padding: 0 10px;
+    gap: 2px;
+  }
+
+  .app-topbar-user {
+    display: none;
+  }
+
+  /* Hide desktop-only topbar controls */
+  .toolbar-btn {
+    display: none;
+  }
+
+  /* Hamburger and overflow buttons (hidden on desktop via index.css) */
+  .app-hamburger-btn {
+    display: flex;
+  }
+
+  .app-overflow-menu-btn {
+    display: flex;
+  }
+
+  /* Notes toggle is its own element on mobile */
+  .app-notes-mobile-btn {
+    display: flex;
+    min-height: 44px;
+    padding: 0 10px;
+  }
+
+  /* ── App workspace ───────────────────────────────────────────────── */
+  .app-workspace {
+    position: relative;
+  }
+
+  /* ── Mobile backdrop ─────────────────────────────────────────────── */
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+    cursor: pointer;
+  }
+
+  /* ── Binder drawer ───────────────────────────────────────────────── */
+  .binder {
+    position: fixed;
+    top: var(--topbar-h);
+    left: 0;
+    bottom: 0;
+    width: min(300px, 85vw);
+    min-width: unset;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+    border-right: 1px solid var(--border);
+  }
+
+  .binder--mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Show close button on mobile (hidden on desktop via binder.css) */
+  .binder-close-btn {
+    display: flex;
+  }
+
+  /* Larger touch targets in binder */
+  .binder-node {
+    min-height: 44px;
+  }
+
+  .binder-expand-btn {
+    width: 36px;
+    height: 44px;
+  }
+
+  .binder-icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* ── Notes panel drawer ──────────────────────────────────────────── */
+  .notes-panel {
+    position: fixed !important; /* override inline positioning */
+    top: var(--topbar-h) !important;
+    right: 0;
+    bottom: 0;
+    width: min(300px, 85vw) !important; /* override inline width */
+    min-width: unset;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .notes-panel--mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Disable resize handle on mobile */
+  .notes-resize-handle {
+    display: none;
+  }
+
+  /* Larger touch targets in notes */
+  .notes-tab {
+    padding: 12px 10px;
+    min-height: 44px;
+  }
+
+  .notes-new-btn,
+  .note-add-field-btn,
+  .note-delete-btn {
+    min-height: 44px;
+    padding: 0 16px;
+  }
+
+  .note-field-remove {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .notes-close-btn,
+  .notes-back-btn {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+
+  /* ── Editor readability ──────────────────────────────────────────── */
+  .editor-content {
+    font-size: var(--editor-font-size, 18px);
+    line-height: var(--editor-line-height, 1.8);
+  }
+
+  .editor-scroll {
+    padding: 20px 16px;
+  }
+
+  /* Larger toolbar buttons */
+  .editor-btn {
+    min-width: 44px;
+    height: 44px;
+    font-size: 15px;
+  }
+
+  .editor-font-select {
+    height: 44px;
+    font-size: 14px;
+    padding: 0 8px;
+  }
+
+  /* ── Overflow menu ───────────────────────────────────────────────── */
+  .app-overflow-menu {
+    display: block;
+    position: fixed;
+    top: var(--topbar-h);
+    right: 0;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 0 6px;
+    box-shadow: var(--shadow);
+    z-index: 300;
+    min-width: 180px;
+    overflow: hidden;
+  }
+
+  .app-overflow-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14px;
+    font-family: var(--sans);
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .app-overflow-item:last-child {
+    border-bottom: none;
+  }
+
+  .app-overflow-item:hover,
+  .app-overflow-item:active {
+    background: var(--bg-hover);
+  }
+
+  .app-overflow-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .app-overflow-item--user {
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: default;
+    pointer-events: none;
+    gap: 8px;
+  }
+
+  .app-overflow-item--user:hover {
+    background: transparent;
+  }
+
+  /* ── Project Manager ─────────────────────────────────────────────── */
+  .pm-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .pm-modal {
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  /* Stack Labels & Statuses vertically — side-by-side is too cramped at phone widths */
+  .pm-ls-columns {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .pm-ls-col:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* Larger touch targets for project row action buttons */
+  .pm-action-btn {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 0.8rem;
+  }
+
+  /* Larger close button */
+  .pm-close-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ── Print overrides ─────────────────────────────────────────────────────── */
+/* These rules must live at the END of mobile.css so they cascade AFTER the  */
+/* @media (max-width: 768px) block above. The mobile binder and notes-panel  */
+/* rules assign box-shadow and position:fixed; if the print page is narrow   */
+/* enough to satisfy max-width:768px, those rules fire and their shadow bleeds*/
+/* onto the printed page despite display:none in index.css, because mobile.css*/
+/* is imported after index.css (higher cascade position, equal specificity).  */
+/* Repeating display:none here, later in the file, wins the cascade cleanly. */
+@media print {
+  .binder      { display: none; }
+  .notes-panel { display: none; }
+}

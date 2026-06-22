@@ -1,0 +1,15 @@
+#!/bin/sh
+# Block commits that include .env files (but allow .env.example).
+# Note: husky runs this with sh -e; all grep calls need || true to avoid
+# exiting on no-match (exit code 1 from grep).
+
+STAGED=$(git diff --cached --name-only)
+
+ENV_FILES=$(echo "$STAGED" | grep -E '(^|/)\.env($|\.)' | grep -v '\.example$' || true)
+
+if [ -n "$ENV_FILES" ]; then
+  echo "ERROR: Attempt to commit .env file(s) with secrets:"
+  echo "$ENV_FILES"
+  echo "Remove these files from staging: git restore --staged <file>"
+  exit 1
+fi

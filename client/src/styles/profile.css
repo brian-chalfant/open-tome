@@ -1,0 +1,406 @@
+/*
+ * profile.css
+ * Styles for the Profile / Writing Analytics page (/profile).
+ * Uses design tokens from index.css.
+ */
+
+/* ── Page shell ──────────────────────────────────────────────────────────────── */
+
+.profile-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────────── */
+
+.profile-header {
+  margin-bottom: 32px;
+}
+
+.profile-back-btn {
+  display: inline-block;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  transition: color 0.15s;
+}
+.profile-back-btn:hover       { color: var(--text); }
+.profile-back-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-avatar {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.profile-display-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-h);
+  line-height: 1.3;
+}
+
+.profile-email {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* ── Loading / error ─────────────────────────────────────────────────────────── */
+
+.profile-status {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  padding: 24px 0;
+  margin: 0;
+}
+
+.profile-status--error { color: var(--danger); }
+
+/* ── Sections ─────────────────────────────────────────────────────────────────── */
+
+.profile-section {
+  margin-bottom: 40px;
+}
+
+.profile-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-dim);
+  margin: 0 0 14px;
+}
+
+/* ── Year navigation ─────────────────────────────────────────────────────────── */
+
+.profile-year-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.profile-section-title--year {
+  margin: 0;
+}
+
+.profile-year-loading {
+  opacity: 0.35;
+}
+
+.profile-year-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 7px;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.profile-year-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.profile-year-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Stat cards ──────────────────────────────────────────────────────────────── */
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.profile-stat-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 14px;
+  text-align: center;
+}
+
+.profile-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-h);
+  line-height: 1;
+}
+
+.profile-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Heatmap ─────────────────────────────────────────────────────────────────── */
+
+.heatmap-wrap {
+  padding-bottom: 4px;
+}
+
+/* Responsive: columns share the container width equally so all ~53 weeks fit
+   without a horizontal scroll. --weeks is set inline from JSX (week count). */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--weeks, 53), minmax(0, 1fr));
+  grid-template-rows: repeat(7, auto);
+  grid-auto-flow: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.heatmap-cell {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+}
+
+/* Grid cells flex to fill their fractional column; aspect-ratio keeps them
+   square as they shrink. Legend cells keep the fixed 13px size above. */
+.heatmap-grid .heatmap-cell {
+  width: auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.heatmap-cell--pad { background: transparent; }
+.heatmap-cell--l0  { background: var(--bg-hover); }
+.heatmap-cell--l1  { background: color-mix(in srgb, var(--accent) 20%, var(--bg-panel)); }
+.heatmap-cell--l2  { background: color-mix(in srgb, var(--accent) 45%, var(--bg-panel)); }
+.heatmap-cell--l3  { background: color-mix(in srgb, var(--accent) 70%, var(--bg-panel)); }
+.heatmap-cell--l4  { background: var(--accent); }
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.heatmap-legend-label { margin: 0 5px; }
+
+/* ── Pace chart ──────────────────────────────────────────────────────────────── */
+
+.profile-pace-chart {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 12px 12px;
+}
+
+/* ── Footer line ─────────────────────────────────────────────────────────────── */
+
+.profile-total-words {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Manuscript Info form ────────────────────────────────────────────────────── */
+
+.profile-ms-section {
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+  margin-top: 40px;
+}
+
+.profile-ms-desc {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin: 0 0 16px;
+}
+
+.profile-ms-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 480px;
+}
+
+.profile-ms-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.profile-ms-field-hint {
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
+.profile-ms-input,
+.profile-ms-textarea {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  padding: 8px 10px;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-ms-input:focus,
+.profile-ms-textarea:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.profile-ms-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.profile-ms-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.profile-ms-save-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 20px;
+  transition: opacity 0.15s;
+}
+
+.profile-ms-save-btn:hover:not(:disabled) { opacity: 0.85; }
+.profile-ms-save-btn:disabled             { opacity: 0.5; cursor: not-allowed; }
+
+.profile-ms-feedback {
+  font-size: 0.8rem;
+}
+.profile-ms-feedback--ok  { color: var(--accent); }
+.profile-ms-feedback--err { color: var(--danger); }
+
+/* Cancel button (edit mode) */
+.profile-ms-cancel-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  transition: background 0.15s;
+}
+.profile-ms-cancel-btn:hover:not(:disabled) { background: var(--bg-hover); }
+.profile-ms-cancel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Read view */
+.profile-ms-read {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+}
+
+.profile-ms-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-ms-field-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.profile-ms-field-value {
+  font-size: 0.875rem;
+  color: var(--text-h);
+}
+
+.profile-ms-field-value--pre {
+  white-space: pre-line;
+}
+
+.profile-ms-field-empty {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Edit button (read mode) */
+.profile-ms-edit-btn {
+  align-self: flex-start;
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  padding: 7px 18px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.profile-ms-edit-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .profile-page { padding: 20px 16px 48px; }
+
+  .profile-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile-stat-value { font-size: 1.5rem; }
+}

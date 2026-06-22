@@ -1,0 +1,5 @@
+node_modules
+test
+.env*
+eslint.config.js
+vitest.config.js

@@ -1,0 +1,16 @@
+{
+  "name": "tome-app",
+  "version": "1.0.0",
+  "description": "Self-hosted, open-source Scrivener-style writing app. Runs on any Docker host.",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "prepare":    "husky",
+    "e2e":        "npm test --prefix e2e",
+    "e2e:headed": "npm run test:headed --prefix e2e",
+    "e2e:ui":     "npm run test:ui --prefix e2e",
+    "e2e:report": "npm run report --prefix e2e"
+  },
+  "devDependencies": {
+    "husky": "9.1.5"
+  }
+}

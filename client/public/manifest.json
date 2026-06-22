@@ -1,0 +1,22 @@
+{
+  "name": "Tome",
+  "short_name": "Tome",
+  "description": "A self-hosted writing application for committed authors.",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

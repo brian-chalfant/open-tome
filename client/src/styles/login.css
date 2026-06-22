@@ -1,0 +1,236 @@
+/*
+ * login.css
+ * Open Tome — login page.
+ * Steel blue + teal. No crimson, no gold. Quiet and deliberate.
+ */
+
+@keyframes logoSettle {
+  0%, 100% { text-shadow: 0 0 18px rgba(122, 158, 181, 0.15); }
+  50%       { text-shadow: 0 0 30px rgba(122, 158, 181, 0.4), 0 0 60px rgba(61, 122, 111, 0.12); }
+}
+
+@keyframes bgDrift {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* ── PAGE ── */
+
+.login-page {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, #181b28 0%, #0f1118 55%, #0a0c12 100%),
+    radial-gradient(ellipse 40% 40% at 75% 75%, #0d1a18 0%, transparent 70%);
+  background-size: 200% 200%, 100% 100%;
+  animation: bgDrift 40s ease infinite;
+  padding: 24px;
+}
+
+/* ── CARD ── */
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: rgba(20, 22, 31, 0.97);
+  border: 1px solid rgba(122, 158, 181, 0.18);
+  outline: 1px solid rgba(122, 158, 181, 0.04);
+  outline-offset: 6px;
+  border-radius: 2px;
+  padding: 48px 40px 36px;
+  box-shadow:
+    0 0 60px rgba(61, 122, 111, 0.08),
+    0 25px 50px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    inset 0 -1px 0 rgba(61, 122, 111, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+/* ── LOGO ── */
+
+.login-logo {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #dde4e8;
+  letter-spacing: 0.04em;
+  animation: logoSettle 6s ease-in-out infinite;
+  margin: 0;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.login-logo-accent {
+  color: #7a9eb5;
+}
+
+/* ── TAGLINE ── */
+
+.login-tagline {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 300;
+  color: #99aab5;
+  text-align: center;
+  margin: -8px 0 0;
+  letter-spacing: 0.3px;
+}
+
+/* ── ORNAMENT: ◆ ─────── ◆ ─────── ◆ ── */
+
+.login-ornament {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  color: rgba(61, 122, 111, 0.55);
+  font-size: 11px;
+  user-select: none;
+}
+
+.login-ornament::before,
+.login-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(122, 158, 181, 0.18), transparent);
+}
+
+/* ── FORM ── */
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(122, 158, 181, 0.65);
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: 'Source Serif 4', Georgia, serif;
+  color: #dde4e8;
+  background: rgba(14, 16, 24, 0.9);
+  border: 1px solid rgba(122, 158, 181, 0.18);
+  border-radius: 2px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.login-input:focus {
+  border-color: rgba(122, 158, 181, 0.48);
+}
+
+.login-input:focus-visible {
+  outline: 2px solid rgba(122, 158, 181, 0.5);
+  outline-offset: 2px;
+}
+
+/* ── ERROR ── */
+
+.login-error {
+  font-size: 13px;
+  color: #e07070;
+  background: rgba(100, 30, 30, 0.2);
+  border: 1px solid rgba(160, 60, 60, 0.35);
+  border-radius: 2px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
+/* ── SUBMIT ── */
+
+.login-submit {
+  width: 100%;
+  padding: 11px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #14161f;
+  background: #7a9eb5;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  margin-top: 4px;
+}
+
+.login-submit:hover:not(:disabled) {
+  background: #9bbdd4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(122, 158, 181, 0.2);
+}
+
+.login-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.login-submit:focus-visible {
+  outline: 2px solid rgba(122, 158, 181, 0.6);
+  outline-offset: 2px;
+}
+
+/* ── SWITCH LINK ── */
+
+.login-switch-link {
+  font-size: 13px;
+  color: #99aab5;
+  text-align: center;
+  margin: 0;
+  font-family: 'Source Serif 4', Georgia, serif;
+}
+
+.login-switch-link a {
+  color: #7a9eb5;
+  text-decoration: none;
+}
+
+.login-switch-link a:hover {
+  text-decoration: underline;
+}
+
+/* ── RESPONSIVE ── */
+
+@media (max-width: 480px) {
+  .login-page {
+    align-items: flex-start;
+    padding: 20px 16px 32px;
+  }
+
+  .login-card {
+    padding: 32px 24px 28px;
+    gap: 16px;
+  }
+
+  .login-logo {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,25 @@
+# Dev-only image — installs devDependencies (nodemon, vitest, etc.).
+# PDF export via Puppeteer requires the production image (which ships Chromium).
+FROM node:20-slim
+
+RUN apt-get update && apt-get install -y wget --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm ci --ignore-scripts
+
+# Source is mounted at runtime — no COPY src needed.
+
+USER node
+
+EXPOSE 3001 3002
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3001/api/health || exit 1
+
+CMD ["npx", "nodemon", "src/index.js"]

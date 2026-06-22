@@ -1,0 +1,15 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+# Puppeteer is a devDep for the prod prerender step — dev container only runs Vite, no Chromium needed
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+RUN npm ci
+
+# Source is mounted at runtime via docker-compose volume — no COPY needed here.
+# node_modules live in the image so the Windows host mount can't shadow them.
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

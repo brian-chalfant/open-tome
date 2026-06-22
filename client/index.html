@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>Tome — Self-Hosted Writing App | Binder, Corkboard &amp; Compile</title>
+    <meta name="description" content="Tome is a self-hosted, open-source Scrivener-style writing app. Run it on any Docker host. Binder hierarchy, corkboard, rich text editor, and compile to PDF, DOCX, and ePub." />
+
+    <!-- Open Graph -->
+    <meta property="og:type"         content="website" />
+    <meta property="og:site_name"    content="Tome" />
+    <meta property="og:title"        content="Tome — Self-Hosted Writing App" />
+    <meta property="og:description"  content="Open-source Scrivener-style writing app. Self-hosted, Docker-based. Binder hierarchy, corkboard, rich text editor, and compile to PDF, DOCX, and ePub." />
+    <meta property="og:locale"       content="en_US" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content="Tome — Self-Hosted Writing App" />
+    <meta name="twitter:description" content="Open-source Scrivener-style writing app. Self-hosted, Docker-based. Binder hierarchy, corkboard, rich text editor, compile to PDF/DOCX/ePub." />
+
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable"          content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title"            content="Tome" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color"            content="#1a1a2e" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Fonts are self-hosted via @fontsource packages (imported in index.css) -->
+
+    <!-- SoftwareApplication structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Tome",
+      "applicationCategory": "WritingApplication",
+      "applicationSubCategory": "Novel Writing Software",
+      "operatingSystem": "Web",
+      "description": "Self-hosted, open-source Scrivener-style writing app with binder-based document hierarchy, corkboard, rich text editor, and compile to PDF, DOCX, and ePub.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Binder-based document hierarchy",
+        "Corkboard view",
+        "Split editor",
+        "Rich text editor",
+        "Compile to PDF",
+        "Compile to DOCX",
+        "Compile to ePub",
+        "Compile to Markdown",
+        "ZIP archive export",
+        "Character and research notes",
+        "Themeable interface"
+      ],
+      "softwareVersion": "1.0"
+    }
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link" onclick="event.preventDefault();var t=document.getElementById('main-content');if(t){t.focus();t.scrollIntoView()}">Skip to main content</a>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

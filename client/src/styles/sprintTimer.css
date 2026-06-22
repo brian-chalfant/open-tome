@@ -1,0 +1,213 @@
+/*
+ * sprintTimer.css
+ * Styles for the SprintTimer drop-down panel.
+ */
+
+/* ── Panel slide animation ── */
+.sprint-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.sprint-panel--open {
+  max-height: 56px;
+}
+
+/* ── Inner row ── */
+.sprint-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 42px;
+  font-size: 12px;
+  font-family: var(--sans);
+  color: var(--text);
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* ── Label ── */
+.sprint-label {
+  color: var(--text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Visible group label above the preset-duration buttons ("Duration") */
+.sprint-group-label {
+  color: var(--text-dim);
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  flex-shrink: 0;
+}
+
+/* ── Countdown display ── */
+.sprint-clock {
+  font-variant-numeric: tabular-nums;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  min-width: 52px;
+  flex-shrink: 0;
+}
+
+.sprint-clock--done {
+  color: var(--accent, #9333ea);
+}
+
+/* ── Preset duration buttons ── */
+.sprint-presets {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.sprint-preset-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 11px;
+  font-family: var(--sans);
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.sprint-preset-btn:hover {
+  background: var(--bg-hover, var(--border));
+}
+
+.sprint-preset-btn--active {
+  background: var(--accent, #9333ea);
+  border-color: var(--accent, #9333ea);
+  color: #fff;
+}
+
+/* ── Custom minutes input ── */
+.sprint-custom-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.sprint-custom-input {
+  width: 42px;
+  font-size: 12px;
+  font-family: var(--sans);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  padding: 2px 5px;
+  text-align: center;
+}
+
+.sprint-custom-input:focus {
+  outline: 2px solid var(--accent, #9333ea);
+  outline-offset: 1px;
+}
+
+.sprint-custom-unit {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+/* ── Action buttons ── */
+.sprint-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 12px;
+  font-family: var(--sans);
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s, border-color 0.1s;
+  flex-shrink: 0;
+}
+
+.sprint-btn:hover {
+  background: var(--bg-hover, var(--border));
+}
+
+.sprint-btn--primary {
+  background: var(--accent, #9333ea);
+  border-color: var(--accent, #9333ea);
+  color: #fff;
+}
+
+.sprint-btn--primary:hover {
+  opacity: 0.88;
+}
+
+.sprint-btn--ghost {
+  border-color: transparent;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.sprint-btn--ghost:hover {
+  color: var(--text);
+  background: none;
+  border-color: transparent;
+}
+
+/* ── Done message ── */
+.sprint-done-msg {
+  font-weight: 500;
+  color: var(--accent, #9333ea);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Separator ── */
+.sprint-sep {
+  flex: 1;
+  min-width: 4px;
+}
+
+/* ── Live word count (running/paused row) ── */
+.sprint-word-count {
+  color: var(--text-dim);
+  font-size: 11px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Paused badge ── */
+.sprint-paused-badge {
+  font-size: 10px;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .sprint-inner {
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .sprint-presets {
+    gap: 3px;
+  }
+
+  .sprint-preset-btn {
+    padding: 2px 5px;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,2 @@
+# Nightly PostgreSQL backup at 02:00 — stdout piped to container log (docker logs backup)
+0 2 * * * /backup.sh >> /proc/1/fd/1 2>&1
