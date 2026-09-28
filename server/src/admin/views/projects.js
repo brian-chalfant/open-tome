@@ -1,4 +1,4 @@
-import { layout, escHtml, formatDate, formatNumber } from './layout.js';
+import { layout, escHtml, jsStrAttr, formatDate, formatNumber } from './layout.js';
 
 export function projectsListView({ projects, path, csrf }) {
   const rows = projects.length
@@ -16,7 +16,7 @@ export function projectsListView({ projects, path, csrf }) {
         <td>${formatDate(p.created_at)}</td>
         <td>
           <form method="POST" action="/admin/projects/${p.id}/delete"
-                onsubmit="return confirm('Delete project &quot;${escHtml(p.title)}&quot;? This cannot be undone.')">
+                onsubmit="return confirm(${jsStrAttr(`Delete project "${p.title}"? This cannot be undone.`)})">
             <input type="hidden" name="_csrf" value="${escHtml(csrf)}">
             <button type="submit" class="btn btn-red">Delete</button>
           </form>
@@ -78,7 +78,7 @@ export function projectDetailView({ project, documents, path, csrf }) {
       </div>
       <div style="padding-top:0.25rem">
         <form method="POST" action="/admin/projects/${project.id}/delete"
-              onsubmit="return confirm('Delete project &quot;${escHtml(project.title)}&quot; and all its documents? This cannot be undone.')">
+              onsubmit="return confirm(${jsStrAttr(`Delete project "${project.title}" and all its documents? This cannot be undone.`)})">
           <input type="hidden" name="_csrf" value="${escHtml(csrf)}">
           <button type="submit" class="btn btn-red">Delete Project</button>
         </form>

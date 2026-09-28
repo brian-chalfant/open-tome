@@ -79,8 +79,9 @@ export function adminCsrfToken(sessionToken) {
  * Middleware: validate the _csrf hidden field on admin POST forms.
  */
 export function requireAdminCsrf(req, res, next) {
-  const expected = adminCsrfToken(req.cookies?.admin_session);
-  if (req.body?._csrf === expected) return next();
+  const expected = Buffer.from(adminCsrfToken(req.cookies?.admin_session));
+  const submitted = Buffer.from(String(req.body?._csrf ?? ''));
+  if (submitted.length === expected.length && crypto.timingSafeEqual(submitted, expected)) return next();
   logger.warn({ path: req.path }, 'admin CSRF validation failed');
   res.status(403).send('Forbidden');
 }

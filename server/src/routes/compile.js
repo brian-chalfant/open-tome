@@ -256,6 +256,16 @@ router.post('/projects/:projectId/compile', asyncHandler(async (req, res) => {
       });
       try {
         const page = await browser.newPage();
+        // The page is rendered from user-supplied content: disable scripts and
+        // refuse every network request / navigation so nothing in it can reach
+        // internal services or file:// URLs (SSRF / local file read).
+        await page.setJavaScriptEnabled(false);
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+          const url = request.url();
+          if (url.startsWith('data:') || url === 'about:blank') request.continue();
+          else request.abort();
+        });
         await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 30000 });
         const pdf = await page.pdf({
           format: 'A4',
@@ -397,17 +407,20 @@ router.post('/projects/:projectId/compile', asyncHandler(async (req, res) => {
 }));
 
 /**
- * HTML-encode a string for safe insertion into HTML text content.
- * Used for chapter titles inserted into the Puppeteer HTML template.
+ * HTML-encode a string for safe insertion into HTML text content or a quoted
+ * attribute value. Used for titles and the author name in the Puppeteer template
+ * (the author name lands inside <meta content="...">, so quotes must be escaped).
  *
  * @param {string} str - Raw string (e.g., a document title from the DB).
- * @returns {string} HTML-encoded string safe for text node insertion.
+ * @returns {string} HTML-encoded string safe for text and attribute contexts.
  */
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
 }
 
 export default router;

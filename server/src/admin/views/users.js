@@ -1,4 +1,4 @@
-import { layout, escHtml, formatDate, formatNumber } from './layout.js';
+import { layout, escHtml, jsStrAttr, formatDate, formatNumber } from './layout.js';
 
 export function usersListView({ users, path, _csrf }) {
   const rows = users.length
@@ -41,7 +41,7 @@ export function userDetailView({ user, totalWords, projects, path, csrf }) {
         <td>${formatDate(p.updated_at)}</td>
         <td>
           <form method="POST" action="/admin/projects/${p.id}/delete"
-                onsubmit="return confirm('Delete project &quot;${escHtml(p.title)}&quot;? This cannot be undone.')">
+                onsubmit="return confirm(${jsStrAttr(`Delete project "${p.title}"? This cannot be undone.`)})">
             <input type="hidden" name="_csrf" value="${escHtml(csrf)}">
             <button type="submit" class="btn btn-red">Delete</button>
           </form>
@@ -64,7 +64,7 @@ export function userDetailView({ user, totalWords, projects, path, csrf }) {
       </div>
       <div style="display:flex;flex-direction:column;gap:0.5rem;padding-top:0.25rem">
         <form method="POST" action="/admin/users/${escHtml(user.id)}/delete"
-              onsubmit="return confirm('Permanently delete user ${escHtml(user.display_name || user.id)} and ALL their data?')">
+              onsubmit="return confirm(${jsStrAttr(`Permanently delete user ${user.display_name || user.id} and ALL their data?`)})">
           <input type="hidden" name="_csrf" value="${escHtml(csrf)}">
           <button type="submit" class="btn btn-red">Delete User</button>
         </form>

@@ -58,6 +58,10 @@ if (NODE_ENV === 'production' && !process.env.JWT_SECRET) {
   logger.fatal('JWT_SECRET is not set — refusing to start in production');
   process.exit(1);
 }
+if (NODE_ENV === 'production' && (process.env.JWT_SECRET.length < 32 || process.env.JWT_SECRET.startsWith('change-me'))) {
+  logger.fatal('JWT_SECRET is too weak (placeholder or < 32 chars) — refusing to start in production');
+  process.exit(1);
+}
 
 // ── Database ──────────────────────────────────────────────────────────────────
 logger.info('Initializing database');

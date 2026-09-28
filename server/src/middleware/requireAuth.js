@@ -35,7 +35,7 @@ export async function requireAuth(req, res, next) {
     const secret = process.env.JWT_SECRET;
     if (!secret) throw new Error('JWT_SECRET not configured');
 
-    const payload = jwt.verify(token, secret);
+    const payload = jwt.verify(token, secret, { algorithms: ['HS256'] });
     const user = await getUserById(getDb(), payload.sub);
 
     if (!user) return res.status(401).json({ error: 'Unauthorized' });

@@ -34,6 +34,9 @@ import logger                from './logger.js';
 /** Maximum allowed message payload in bytes (1 MB). */
 const MAX_PAYLOAD = 1024 * 1024;
 
+/** Upper bound for a client-reported word count (matches the REST content schema). */
+const MAX_WORD_COUNT = 10_000_000;
+
 /** Interval in milliseconds between heartbeat pings (30 seconds). */
 const HEARTBEAT_INTERVAL = 30_000;
 
@@ -99,7 +102,7 @@ async function authenticateUpgrade(req) {
     const secret = process.env.JWT_SECRET;
     if (!secret) return null;
 
-    const payload = jwt.verify(token, secret);
+    const payload = jwt.verify(token, secret, { algorithms: ['HS256'] });
     const user = await getUserById(getDb(), payload.sub);
     if (!user || user.token_version !== payload.tv) return null;
     return user;
@@ -167,8 +170,9 @@ async function handleSave(ws, { documentId, content, wordCount }) {
     return;
   }
 
+  // Clamp to the same range the REST save endpoint accepts.
   const safeWords = (typeof wordCount === 'number' && Number.isFinite(wordCount))
-    ? Math.max(0, Math.floor(wordCount))
+    ? Math.min(MAX_WORD_COUNT, Math.max(0, Math.floor(wordCount)))
     : 0;
 
   await updateDocumentContent(db, documentId, content ?? null, safeWords);
@@ -196,6 +200,10 @@ function handleMessage(ws, rawData) {
   } catch {
     return; // Silently discard malformed JSON — do not disconnect the client
   }
+
+  // JSON.parse accepts 'null', numbers, strings and arrays. Reading .type off
+  // null would throw inside the 'message' listener and crash the process.
+  if (!msg || typeof msg !== 'object' || Array.isArray(msg)) return;
 
   // Application-level pong — sent in response to our { type: 'ping' } heartbeat.
   // Using JSON data frames (not WS protocol ping/pong control frames) because
@@ -243,6 +251,17 @@ export function attachWebSocketServer(httpServer) {
     // Only handle WebSocket upgrades on the /ws path.
     if (req.url !== '/ws') {
       socket.on('error', () => {});
+      socket.destroy();
+      return;
+    }
+
+    // Reject cross-origin upgrades (cross-site WebSocket hijacking). Browsers
+    // always send Origin on WS handshakes; SameSite cookies alone don't stop
+    // a same-site (e.g. sibling subdomain) page from opening a socket.
+    const allowedOrigin = process.env.ALLOWED_ORIGIN;
+    if (allowedOrigin && req.headers.origin && req.headers.origin !== allowedOrigin) {
+      socket.on('error', () => {});
+      socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
       socket.destroy();
       return;
     }
