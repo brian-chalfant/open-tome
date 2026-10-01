@@ -3,7 +3,17 @@ export function escHtml(s) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Encode a value as a JavaScript string literal safe to embed inside a
+ * double-quoted HTML event-handler attribute (e.g. onsubmit="confirm(...)").
+ * HTML entities are decoded before the JS runs, so escHtml alone is not enough.
+ */
+export function jsStrAttr(s) {
+  return escHtml(JSON.stringify(String(s ?? '')));
 }
 
 export function formatDate(d) {

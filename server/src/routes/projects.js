@@ -35,6 +35,11 @@ router.use(requireAuth);
 
 const titleSchema = z.string().min(1).max(200);
 
+// Bounds for values stored in Postgres INTEGER columns. Out-of-range numbers
+// would otherwise surface as database errors.
+const INT32_MIN = -2147483648;
+const INT32_MAX = 2147483647;
+
 /** Zod schema for the import payload — validates structure and field lengths. */
 const importSchema = z.object({
   version: z.literal(1),
@@ -42,13 +47,13 @@ const importSchema = z.object({
   project: z.object({
     title: z.string().min(1).max(200),
     documents: z.array(z.object({
-      clientId:       z.number().int(),
-      parentClientId: z.number().int().nullable(),
+      clientId:       z.number().int().safe(),
+      parentClientId: z.number().int().safe().nullable(),
       title:          z.string().max(200).default('Untitled'),
       type:           z.enum(['scene', 'folder', 'chapter', 'character', 'research']),
-      sort_order:     z.number().int().default(0),
+      sort_order:     z.number().int().min(INT32_MIN).max(INT32_MAX).default(0),
       content:        z.string().max(1_000_000).nullable().default(null),
-      word_count:     z.number().int().min(0).default(0),
+      word_count:     z.number().int().min(0).max(10_000_000).default(0),
     })).max(500),
   }),
 });
@@ -80,29 +85,29 @@ function topoSortDocs(docs) {
  * GET /api/projects
  * Returns all non-archived projects owned by the authenticated user.
  */
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
   const projects = await listProjects(getDb(), req.user.id);
   res.json(projects);
-});
+}));
 
 /**
  * GET /api/projects/all
  * Returns ALL projects (including archived) for the project manager.
  * Must be registered before /:id to prevent "all" being matched as an id.
  */
-router.get('/all', async (req, res) => {
+router.get('/all', asyncHandler(async (req, res) => {
   const projects = await listAllProjects(getDb(), req.user.id);
   res.json(projects);
-});
+}));
 
-router.post('/', async (req, res) => {
-  const parsed = titleSchema.safeParse(req.body.title);
+router.post('/', asyncHandler(async (req, res) => {
+  const parsed = titleSchema.safeParse(req.body?.title);
   if (!parsed.success) {
     return res.status(400).json({ error: 'Invalid title' });
   }
   const project = await createProject(getDb(), req.user.id, parsed.data);
   res.status(201).json(project);
-});
+}));
 
 router.patch('/:id', asyncHandler(async (req, res) => {
   const db = getDb();
@@ -144,7 +149,7 @@ router.patch('/:id/archive', asyncHandler(async (req, res) => {
  * Set or clear the word-count target and deadline for a project.
  */
 const targetsSchema = z.object({
-  target_words: z.number().int().positive().nullable(),
+  target_words: z.number().int().positive().max(INT32_MAX).nullable(),
   deadline:     z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
 });
 
@@ -200,7 +205,7 @@ router.get('/:id/export', asyncHandler(async (req, res) => {
  * Reconstitute a project from an exported JSON payload.
  * Runs inside a single DB transaction — either all records are created or none.
  */
-router.post('/import', async (req, res) => {
+router.post('/import', asyncHandler(async (req, res) => {
   const parsed = importSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: 'Invalid import file', details: parsed.error.flatten() });
@@ -242,7 +247,7 @@ router.post('/import', async (req, res) => {
   } finally {
     client.release();
   }
-});
+}));
 
 /**
  * GET /api/projects/:id/archive?format=txt|rtf|docx

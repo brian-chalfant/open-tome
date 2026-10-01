@@ -35,11 +35,15 @@ import {
 import { requireAuth } from '../middleware/requireAuth.js';
 import { loadOwnedProject, loadOwnedDocument, asyncHandler } from '../middleware/ownership.js';
 import { recordDelta }  from '../db/analyticsDb.js';
+import { findLabel, findStatus } from '../db/labelDb.js';
 
 const router = Router();
 
 // All document routes require a valid access token
 router.use(requireAuth);
+
+// Bounds for sort_order, which is stored in a Postgres INTEGER column.
+const sortOrderSchema = z.number().int().min(-2147483648).max(2147483647);
 
 /** Zod enum for allowed document types. */
 const docTypeEnum = z.enum(['scene', 'folder', 'chapter', 'research', 'character']);
@@ -52,7 +56,7 @@ const createSchema = z.object({
   title:      z.string().min(1).max(200).optional().default('Untitled'),
   type:       docTypeEnum.optional().default('scene'),
   parent_id:  z.number().int().positive().nullable().optional(),
-  sort_order: z.number().int().optional().default(0),
+  sort_order: sortOrderSchema.optional().default(0),
 });
 
 /**
@@ -61,7 +65,7 @@ const createSchema = z.object({
 const updateSchema = z.object({
   title:      z.string().min(1).max(200).optional(),
   parent_id:  z.number().int().positive().nullable().optional(),
-  sort_order: z.number().int().optional(),
+  sort_order: sortOrderSchema.optional(),
   label_id:   z.number().int().positive().nullable().optional(),
   status_id:  z.number().int().positive().nullable().optional(),
   synopsis:   z.string().max(500).optional(),
@@ -74,7 +78,7 @@ const updateSchema = z.object({
 const reorderSchema = z.array(
   z.object({
     id:         z.number().int().positive(),
-    sort_order: z.number().int(),
+    sort_order: sortOrderSchema,
   })
 ).min(1).max(1000);
 
@@ -94,6 +98,44 @@ async function validateParent(db, parentId, projectId, userId) {
   if (parentId == null) return true;
   const parent = await findDocument(db, parentId);
   return parent && parent.project_id === projectId && parent.user_id === userId;
+}
+
+/**
+ * Return true if moving docId under newParentId would create a cycle
+ * (i.e. newParentId is docId itself or one of its descendants).
+ *
+ * @param {import('pg').Pool} db
+ * @param {number} docId
+ * @param {number|null|undefined} newParentId
+ * @returns {Promise<boolean>}
+ */
+async function wouldCreateCycle(db, docId, newParentId) {
+  const seen = new Set();
+  let cur = newParentId;
+  while (cur != null) {
+    if (cur === docId) return true;
+    if (seen.has(cur)) return true; // pre-existing cycle — refuse to extend it
+    seen.add(cur);
+    const node = await findDocument(db, cur);
+    cur = node?.parent_id ?? null;
+  }
+  return false;
+}
+
+/**
+ * Validate that a label/status id (if provided) belongs to the same project and user.
+ *
+ * @param {Function} finder - findLabel or findStatus
+ * @param {import('pg').Pool} db
+ * @param {number|null|undefined} id
+ * @param {number} projectId
+ * @param {string} userId
+ * @returns {Promise<boolean>}
+ */
+async function validateProjectItem(finder, db, id, projectId, userId) {
+  if (id == null) return true;
+  const item = await finder(db, id);
+  return !!item && item.project_id === projectId && item.user_id === userId;
 }
 
 router.get('/projects/:projectId/documents', asyncHandler(async (req, res) => {
@@ -188,6 +230,15 @@ router.patch('/documents/:id', asyncHandler(async (req, res) => {
 
   if ('parent_id' in fields && !await validateParent(db, fields.parent_id, doc.project_id, req.user.id)) {
     return res.status(400).json({ error: 'Invalid parent_id' });
+  }
+  if ('parent_id' in fields && await wouldCreateCycle(db, doc.id, fields.parent_id)) {
+    return res.status(400).json({ error: 'Invalid parent_id' });
+  }
+  if ('label_id' in fields && !await validateProjectItem(findLabel, db, fields.label_id, doc.project_id, req.user.id)) {
+    return res.status(400).json({ error: 'Invalid label_id' });
+  }
+  if ('status_id' in fields && !await validateProjectItem(findStatus, db, fields.status_id, doc.project_id, req.user.id)) {
+    return res.status(400).json({ error: 'Invalid status_id' });
   }
 
   const updated = await updateDocument(db, doc.id, fields);

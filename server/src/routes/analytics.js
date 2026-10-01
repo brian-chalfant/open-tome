@@ -6,13 +6,14 @@
 import { Router } from 'express';
 import { getDb } from '../db/migrate.js';
 import { requireAuth } from '../middleware/requireAuth.js';
+import { asyncHandler } from '../middleware/ownership.js';
 import { getHeatmapData, getPaceData, getSummary } from '../db/analyticsDb.js';
 
 const router = Router();
 router.use(requireAuth);
 
 /** GET /api/analytics — full profile data (heatmap + pace + current-year summary). */
-router.get('/analytics', async (req, res) => {
+router.get('/analytics', asyncHandler(async (req, res) => {
   const db     = getDb();
   const userId = req.user.id;
 
@@ -23,10 +24,10 @@ router.get('/analytics', async (req, res) => {
   ]);
 
   res.json({ heatmap, pace, summary });
-});
+}));
 
 /** GET /api/analytics/summary?year=YYYY — year-scoped stat cards only. */
-router.get('/analytics/summary', async (req, res) => {
+router.get('/analytics/summary', asyncHandler(async (req, res) => {
   const db     = getDb();
   const userId = req.user.id;
   const year   = parseInt(req.query.year, 10);
@@ -37,6 +38,6 @@ router.get('/analytics/summary', async (req, res) => {
 
   const summary = await getSummary(db, userId, year);
   res.json({ summary });
-});
+}));
 
 export default router;
